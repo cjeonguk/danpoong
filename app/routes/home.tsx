@@ -36,14 +36,20 @@ export default function Home() {
         ))}
       </div>
       <div className="flex flex-col gap-3">
-        <div className="flex flex-col bg-white min-h-16 p-3 rounded-lg shadow-md">
-          <div className="flex flex-row text-[#FF7474] text-base font-semibold">
+        <Link
+          to="/inbox"
+          className="flex flex-col bg-white min-h-16 p-3 rounded-lg shadow-md"
+        >
+          <div className="flex flex-row text-primary text-base font-semibold">
             <img className="mr-2" src="/inbox.svg" alt="" />
             INBOX
           </div>
-        </div>
+        </Link>
         <div className="flex flex-col bg-white min-h-108 rounded-lg shadow-md">
-          <div className="flex flex-col bg-white rounded-lg shadow-[0_4px_4px_0_#00000040] gap-1 pt-1 pb-3">
+          <Link
+            to="/calendar"
+            className="flex flex-col bg-white rounded-lg shadow-[0_4px_4px_0_#00000040] gap-1 pt-1 pb-3"
+          >
             <div className="flex flex-row justify-center text-3xl font-semibold text-[#5F5F5F]">
               JUN
             </div>
@@ -63,7 +69,7 @@ export default function Home() {
                 ))}
               </div>
             </div>
-          </div>
+          </Link>
           <div></div>
         </div>
       </div>
