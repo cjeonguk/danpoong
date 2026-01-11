@@ -1,5 +1,10 @@
 import { Link } from "react-router";
 import useEmblaCarousel from "embla-carousel-react";
+import {
+  getDayIndexFromName,
+  getMonthNameFromIndex,
+  getWeekFromDate,
+} from "~/utils/dates";
 
 export default function Home() {
   const [emblaGroupsRef] = useEmblaCarousel({
@@ -11,7 +16,9 @@ export default function Home() {
     { imgUrl: "https://picsum.photos/300/300", link: "/groups/picsum3" },
     { imgUrl: "https://picsum.photos/400/300", link: "/groups/picsum4" },
   ];
-  const thisWeek = [6, 7, 8, 9, 10, 11, 12];
+  const STARTING_DAY = "Sunday";
+  const now = new Date();
+  const thisWeek = getWeekFromDate(now, getDayIndexFromName(STARTING_DAY));
   return (
     <div className="flex flex-col gap-6">
       <div ref={emblaGroupsRef}>
@@ -57,7 +64,7 @@ export default function Home() {
             className="flex flex-col bg-white rounded-lg shadow-[0_4px_4px_0_#00000040] gap-1 pt-1 pb-3"
           >
             <div className="flex flex-row justify-center text-3xl font-semibold text-[#5F5F5F]">
-              JUN
+              {getMonthNameFromIndex(now.getMonth()).slice(0, 3).toUpperCase()}
             </div>
             <div className="flex flex-row h-8 gap-2 px-2">
               <div className="flex flex-col justify-center items-center h-full text-[11px] font-bold text-[#5F5F5F] leading-none gap-0.5">
@@ -67,10 +74,10 @@ export default function Home() {
               <div className="flex flex-row gap-2">
                 {thisWeek.map((day) => (
                   <div
-                    key={day}
+                    key={day.toISOString()}
                     className="flex justify-center items-center h-full aspect-square rounded-full bg-[#D9D9D9] text-white font-semibold"
                   >
-                    {day}
+                    {day.getDate()}
                   </div>
                 ))}
               </div>

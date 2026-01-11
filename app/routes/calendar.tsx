@@ -1,9 +1,20 @@
+import { useState } from "react";
 import Plus from "~/components/plus";
-import { DAYS } from "~/utils/dates";
+import { cn } from "~/lib/utils";
+import {
+  getDatesFromWeeksInMonthOfDate,
+  getDayIndexFromName,
+  getDayNameFromIndex,
+  getDaysOfWeek,
+  getMonthNameFromIndex,
+  isSameDate,
+} from "~/utils/dates";
 
 export default function Calendar() {
-  const formattedDays = DAYS.map((day) => day.slice(0, 3).toUpperCase());
-  const datesInMonth = Array.from({ length: 30 }, (_, i) => i + 1);
+  const STARTING_DAY = "Sunday";
+  const formattedDays = getDaysOfWeek(getDayIndexFromName(STARTING_DAY)).map(
+    (day) => getDayNameFromIndex(day).slice(0, 3).toUpperCase(),
+  );
   const todos: TodoProps[] = [
     {
       title: "Do Math Homework",
@@ -39,25 +50,67 @@ export default function Calendar() {
       completed: false,
     },
   ];
+
+  const now = new Date();
+  const [selectedDate, setSelectedDate] = useState<Date>(now);
+  const [monthReferenceDate, setMonthReferenceDate] = useState<Date>(now);
+  const [datesInSelectedMonth, setDatesInSelectedMonth] = useState<Date[]>(
+    getDatesFromWeeksInMonthOfDate(now, getDayIndexFromName(STARTING_DAY)),
+  );
+
   return (
     <div className="w-full flex flex-col flex-1 relative">
       <div className="flex flex-col items-stretch absolute top-0 left-0 right-0 rounded-lg bg-primary shadow-[0px_4px_4px_0px_#00000040] text-white py-1.5 gap-1">
         <div className="flex justify-center items-center text-[#FFFFFFC0] text-sm font-semibold leading-none">
-          2025
+          {monthReferenceDate.getFullYear()}
         </div>
         <div className="flex flex-row justify-center items-center gap-8">
-          <div>
+          <button
+            onClick={() => {
+              const previousMonthReferenceDate = new Date(
+                monthReferenceDate.getFullYear(),
+                monthReferenceDate.getMonth() - 1,
+                1,
+              );
+              setMonthReferenceDate(previousMonthReferenceDate);
+              setDatesInSelectedMonth(
+                getDatesFromWeeksInMonthOfDate(
+                  previousMonthReferenceDate,
+                  getDayIndexFromName(STARTING_DAY),
+                ),
+              );
+            }}
+          >
             <img src="/previous.svg" alt="" />
+          </button>
+          <div className="text-[32px] leading-none font-semibold">
+            {getMonthNameFromIndex(monthReferenceDate.getMonth())
+              .slice(0, 3)
+              .toUpperCase()}
           </div>
-          <div className="text-[32px] leading-none font-semibold">JUN</div>
-          <div>
+          <button
+            onClick={() => {
+              const previousMonthReferenceDate = new Date(
+                monthReferenceDate.getFullYear(),
+                monthReferenceDate.getMonth() + 1,
+                1,
+              );
+              setMonthReferenceDate(previousMonthReferenceDate);
+              setDatesInSelectedMonth(
+                getDatesFromWeeksInMonthOfDate(
+                  previousMonthReferenceDate,
+                  getDayIndexFromName(STARTING_DAY),
+                ),
+              );
+            }}
+          >
             <img src="/next.svg" alt="" />
-          </div>
+          </button>
         </div>
       </div>
       <div className="flex flex-col items-stretch flex-1 pt-18 border-3 border-primary rounded-lg gap-4">
         <div className="flex flex-col items-stretch px-1">
-          <div className="grid grid-flow-row grid-cols-7 rounded-lg bg-white pt-5 px-6 pb-5 gap-y-5">
+          <div className="grid grid-flow-row grid-cols-7 justify-items-center rounded-lg bg-white pt-5 px-6 pb-5 gap-y-5">
             {formattedDays.map((day) => (
               <div
                 key={day}
@@ -66,13 +119,24 @@ export default function Calendar() {
                 {day}
               </div>
             ))}
-            {datesInMonth.map((date) => (
-              <div
-                key={date}
-                className="flex justify-center items-center text-lg font-medium"
+            {datesInSelectedMonth.map((date) => (
+              <button
+                key={date.toISOString()}
+                className="flex justify-center"
+                onClick={() => setSelectedDate(date)}
               >
-                {date}
-              </div>
+                <div
+                  className={cn(
+                    "flex justify-center items-center text-lg font-medium aspect-square h-7.5 rounded-full",
+                    date.getMonth() !== monthReferenceDate.getMonth() &&
+                      "text-[#3C3C4399]",
+                    isSameDate(date, now) && "border-2 border-primary",
+                    isSameDate(date, selectedDate) && "",
+                  )}
+                >
+                  {date.getDate()}
+                </div>
+              </button>
             ))}
           </div>
         </div>
