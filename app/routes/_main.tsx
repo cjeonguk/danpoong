@@ -50,7 +50,7 @@ export default function Main() {
             })}
           </div>
 
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-9">
             {rightItems.map((item) => {
               const Icon = item.icon;
               return (
