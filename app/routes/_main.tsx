@@ -35,7 +35,7 @@ export default function Main() {
           />
         </svg>
         <div className="absolute bottom-0 left-0 right-0 h-[84px] flex items-center justify-between px-7 pb-2">
-          <div className="flex items-center gap-7">
+          <div className="flex items-center gap-9">
             {leftItems.map((item) => {
               const Icon = item.icon;
               return (
@@ -50,7 +50,7 @@ export default function Main() {
             })}
           </div>
 
-          <div className="flex items-center gap-7">
+          <div className="flex items-center gap-8">
             {rightItems.map((item) => {
               const Icon = item.icon;
               return (
