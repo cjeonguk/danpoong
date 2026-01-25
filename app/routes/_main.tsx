@@ -15,8 +15,10 @@ export default function Main() {
   const location = useLocation();
 
   return (
-    <div className="flex flex-col bg-[#EFEFEF] min-h-screen overflow-hidden">
-      <Outlet />
+    <div className="flex flex-col bg-gray-50 min-h-screen overflow-hidden">
+      <div className="h-[93vh]">
+        <Outlet />
+      </div>
       <div className="fixed bottom-0 left-0 right-0">
         <svg
           viewBox="0 0 400 100"
